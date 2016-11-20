@@ -25,7 +25,7 @@ public class PersistentTransactionDAO implements TransactionDAO {
     public void logTransaction(Date date, String accountNo, ExpenseType expenseType, double amount) {
         SQLiteDatabase db=PersistentExpenseManager.getDb().getWritableDatabase();
         ContentValues contentValues=new ContentValues();
-        contentValues.put("DATE",date.toString());
+        contentValues.put("TRANSDATE",date.toString());
         contentValues.put("ACCNO",accountNo);
         contentValues.put("TYPE",expenseType.toString());
         contentValues.put("AMOUNT",amount);
@@ -37,12 +37,11 @@ public class PersistentTransactionDAO implements TransactionDAO {
         SQLiteDatabase db= PersistentExpenseManager.getDb().getWritableDatabase();
         Cursor res=db.rawQuery("select * from transactionLog",null);
         List<Transaction> transaction_list= new ArrayList<Transaction>();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         while (res.moveToNext()){
             Transaction transaction=null;
             try {
-                transaction = new Transaction(formatter.parse(res.getString(1)), res.getString(2),ExpenseType.valueOf(res.getString(3)), res.getDouble(4));
-            } catch (ParseException e) {
+                transaction = new Transaction(new Date(res.getLong(res.getColumnIndex("TRANSDATE"))), res.getString(2),ExpenseType.valueOf(res.getString(3)), res.getDouble(4));
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             transaction_list.add(transaction);
@@ -55,12 +54,11 @@ public class PersistentTransactionDAO implements TransactionDAO {
         SQLiteDatabase db= PersistentExpenseManager.getDb().getWritableDatabase();
         Cursor res= db.rawQuery("select * from transactionLog limit " + limit,null);
         List<Transaction> transaction_list= new ArrayList<Transaction>();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         while (res.moveToNext()){
             Transaction transaction=null;
             try {
-                transaction = new Transaction(formatter.parse(res.getString(1)), res.getString(2),ExpenseType.valueOf(res.getString(3)), res.getDouble(4));
-            } catch (ParseException e) {
+                transaction = new Transaction(new Date(res.getLong(res.getColumnIndex("TRANSDATE"))), res.getString(2),ExpenseType.valueOf(res.getString(3)), res.getDouble(4));
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             transaction_list.add(transaction);

@@ -47,7 +47,7 @@ public class PersistentAccountDAO implements AccountDAO {
     @Override
     public Account getAccount(String accountNo) throws InvalidAccountException {
         SQLiteDatabase db=PersistentExpenseManager.getDb().getWritableDatabase();
-        Cursor res=db.rawQuery("select * from account where ACCNO=accountNo",null);
+        Cursor res=db.rawQuery("select * from account where ACCNO="+accountNo,null);
         Account account=new Account(accountNo,res.getString(1),res.getString(2),res.getDouble(3));
         return account;
     }
@@ -72,13 +72,14 @@ public class PersistentAccountDAO implements AccountDAO {
     @Override
     public void updateBalance(String accountNo, ExpenseType expenseType, double amount) throws InvalidAccountException {
         SQLiteDatabase db=PersistentExpenseManager.getDb().getWritableDatabase();
-        String sql = "update account set BALANCE = BALANCE + ? where ACCNO="+accountNo;
+        String sql = "update account set BALANCE = BALANCE + ? where ACCNO = ?";
         SQLiteStatement statement = db.compileStatement(sql);
         if(expenseType == ExpenseType.EXPENSE){
             statement.bindDouble(1,-amount);
         }else{
             statement.bindDouble(1,amount);
         }
+        statement.bindString(2,accountNo);
         statement.executeUpdateDelete();
     }
 }

@@ -21,7 +21,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //        db.execSQL("create table if not exists transactionLog(ID INTEGER PRIMARY KEY AUTOINCREMENT, DATE TEXT, ACCNO TEXT, TYPE TEXT, AMOUNT DOUBLE) ");
         db.execSQL("CREATE TABLE IF NOT EXISTS transactionLog(" +
                 "ID INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "DATE TEXT," +
+                "TRANSDATE DATE," +
                 "ACCNO TEXT," +
                 "TYPE TEXT," +
                 "AMOUNT DOUBLE" +
