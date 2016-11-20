@@ -25,7 +25,7 @@ public class PersistentTransactionDAO implements TransactionDAO {
     public void logTransaction(Date date, String accountNo, ExpenseType expenseType, double amount) {
         SQLiteDatabase db=PersistentExpenseManager.getDb().getWritableDatabase();
         ContentValues contentValues=new ContentValues();
-        contentValues.put("TRANSDATE",date.toString());
+        contentValues.put("TRANSDATE",date.getTime());
         contentValues.put("ACCNO",accountNo);
         contentValues.put("TYPE",expenseType.toString());
         contentValues.put("AMOUNT",amount);
